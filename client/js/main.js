@@ -4,7 +4,8 @@ var analyser;
 var delay;
 var gain;
 var binArray = [];
-var mustUpdate;
+var totalLength = 0;
+var recording;
 var startTime;
 var endTime;
 var duration;
@@ -12,68 +13,76 @@ var isIdiotized;
 var idiotLevel;
 var totalBytes;
 var processor;
-$("html").on("click", ".startRec", function(e){ 
+var recorder;
+var timeLimit = 13;
+var deleted = false;
+
+$("html").on("click", ".si_Record", function(e){ 
     e.preventDefault();
-    $(e.target).hide();
-    $(".stopRec").show();
-    isIdiotized = $("#idiot").is(":checked");
+    var $button = $(e.target);
     totalBytes = [];
     navigator.webkitGetUserMedia(
         {audio:true}, 
         function(stream){
-            mustUpdate = true;
-            //var audio = document.querySelector("audio");
-            //audio.src = window.URL.createObjectURL(stream);
+            recording = true;
+            toggleRecorderButtons();
+            timeOutRecord();
             audioContext = new AudioContext();
             mediaStream = audioContext.createMediaStreamSource(stream);
-            processor = mediaStream.context.createScriptProcessor(4096, 2, 2);
-            processor.onaudioprocess = function(e){
-                if(mustUpdate){
-                    var audioObject = {
-                        l: e.inputBuffer.getChannelData(0),
-                        r: e.inputBuffer.getChannelData(1)
-                    }
-                    binArray.push(audioObject);
-                }
-            }
-            if(isIdiotized){
-                delay = audioContext.createDelay();
-                gain = audioContext.createGain();
-                gain.gain.value= 2;
-                delay.delayTime.value = $("#idiotLevel").val() || 0.25;
-            }
-            //binArray = new Uint8Array(analyser.frequencyBinCount);
-            //startTime = Date.now();
-            playSound();
-            $("audio source").attr("src", window.URL.createObjectURL(stream));
-            //console.log(stream)
+            recorder = new Recorder(mediaStream);
+            recorder.record();
         },
-        function(e){
-            console.log(123)
-        }
+        function(e){}
     );
     
     function playSound(buffer){
-        if(delay){
-            mediaStream.connect(delay);
-            delay.connect(gain);
-            gain.connect(audioContext.destination);
-        }else{
-            mediaStream.connect(processor);
-            processor.connect(audioContext.destination);
-        }
+        mediaStream.connect(processor);
+        processor.connect(audioContext.destination);
     };
-    
-    //var worker = new Worker("./js/recorder.js");
 })
 
-$("html").on("click", ".stopRec", function(e){
+$("html").on("click", ".si_RecordStop", function(e){
     e.preventDefault();
-    mustUpdate = false;
+    recorder.stop();
     mediaStream.mediaStream.stop();
-    $(e.target).hide();
-    $(".startRec").show();
+    createDownloadLink();
+    toggleRecorderButtons();
+    togglePlayDelete();
+    resetInitialState();
     
+    function createDownloadLink() {
+        recorder && recorder.exportWAV(function(blob) {
+          var url = URL.createObjectURL(blob);
+          var au = document.createElement('audio');
+
+          au.controls = false;
+          au.src = url;
+          $("#recorder").append(au);
+        });
+      }
+});
+
+$("html").on("click", ".si_play", function(e){
+    var audioTag = $("#recorder audio").get(0);
+    audioTag.play();
+    toggleRecorderPlayButtons();
+});
+
+$("html").on("click", ".si_stop", function(e){
+    var audioTag = $("#recorder audio").get(0);
+    audioTag.pause();
+    audioTag.currentTime = 0;
+    toggleRecorderPlayButtons();
+});
+
+$("html").on("click", ".si_deleteRecord", function(e){
+    var audioTag = $("#recorder audio").get(0);
+    audioTag.pause();
+    audioTag.currentTime = 0;
+    recorder.clear();
+    $(audioTag).remove();
+    resetInitialState();
+    togglePlayDelete();
 });
 
 $("html").on("change", "#idiotLevel", function(e){
@@ -100,47 +109,36 @@ $("html").on("click", "#download", function(e){
     }
 });
 
-var writeString = function(view, offset, string){
-  for (var i = 0; i < string.length; i++){
-    view.setUint8(offset + i, string.charCodeAt(i));
-  }
+var timeOutRecord = function () {
+    setTimeout(function(){
+        timeLimit--;
+        console.log(timeLimit);
+        if(recording){
+            if(timeLimit > 0){
+                $("#recorder .si_RecordStop").find(".countdown").html(timeLimit);
+                timeOutRecord();
+            }else{
+                $(".si_RecordStop").trigger("click")
+            }
+        }
+    }, 1000);
+};
+
+var resetInitialState = function(){
+    timeLimit = 13;
+    recording = false;
+};
+
+var togglePlayDelete = function(){
+    $("#recorder .si_deleteRecord").toggleClass("hidden");
+    $("#recorder .si_play").toggleClass("hidden");
+};
+
+var toggleRecorderButtons = function () {
+    $("#recorder .si_Record").toggleClass("hidden");
+    $("#recorder .si_RecordStop").toggleClass("hidden").find(".countdown").html(timeLimit);
 }
-
-
-var encodeWAV = function(samples){
-  var buffer = new ArrayBuffer(44 + samples.length);
-  var view = new DataView(buffer);
-
-  /* RIFF identifier */
-  writeString(view, 0, 'RIFF');
-  /* RIFF chunk length */
-  view.setUint32(4, 36 + samples.length * 2, true);
-  /* RIFF type */
-  writeString(view, 8, 'WAVE');
-  /* format chunk identifier */
-  writeString(view, 12, 'fmt ');
-  /* format chunk length */
-  view.setUint32(16, 16, true);
-  /* sample format (raw) */
-  view.setUint16(20, 1, true);
-  /* channel count */
-  view.setUint16(22, 2, true);
-  /* sample rate */
-  view.setUint32(24, sampleRate, true);
-  /* byte rate (sample rate * block align) */
-  view.setUint32(28, sampleRate * 4, true);
-  /* block align (channel count * bytes per sample) */
-  view.setUint16(32, 4, true);
-  /* bits per sample */
-  view.setUint16(34, 16, true);
-  /* data chunk identifier */
-  writeString(view, 36, 'data');
-  /* data chunk length */
-  view.setUint32(40, samples.length * 2, true);
-
-  floatTo16BitPCM(view, 44, samples);
-
-  return view;
+var toggleRecorderPlayButtons = function () {
+    $("#recorder .si_stop").toggleClass("hidden");
+    $("#recorder .si_play").toggleClass("hidden");
 }
-
-
