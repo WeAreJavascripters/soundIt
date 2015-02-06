@@ -29,8 +29,8 @@ $("html").on("click", ".si_Record", function(e){
             timeOutRecord();
             audioContext = new AudioContext();
             mediaStream = audioContext.createMediaStreamSource(stream);
-            recorder = new Recorder(mediaStream);
-            recorder.record();
+            recorder = new Recorder(stream);
+            recorder.rec();
         },
         function(e){}
     );
@@ -44,22 +44,16 @@ $("html").on("click", ".si_Record", function(e){
 $("html").on("click", ".si_RecordStop", function(e){
     e.preventDefault();
     recorder.stop();
+    //var blob = recorder.getBlob();
     mediaStream.mediaStream.stop();
-    createDownloadLink();
+    //createDownloadLink();
     toggleRecorderButtons();
     togglePlayDelete();
     resetInitialState();
-    
-    function createDownloadLink() {
-        recorder && recorder.exportWAV(function(blob) {
-          var url = URL.createObjectURL(blob);
-          var au = document.createElement('audio');
+});
 
-          au.controls = false;
-          au.src = url;
-          $("#recorder").append(au);
-        });
-      }
+$("html").on("click", ".si_generate", function(e){
+    recorder.getBlob();
 });
 
 $("html").on("click", ".si_play", function(e){
