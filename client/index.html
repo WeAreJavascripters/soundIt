@@ -1,138 +1,142 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="">
-        <meta name="author" content="">
-        <link rel="icon" href="./favicon.ico">
 
-        <title>soundIt</title>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="./favicon.ico">
 
-        <!-- Bootstrap core CSS -->
-        <link href="./lib/css/bootstrap.min.css" rel="stylesheet">
-        <!-- Bootstrap theme -->
-        <link href="./lib/css/bootstrap-theme.min.css" rel="stylesheet">
-        <!-- FontAwesome fonts -->
-        <link href="./lib/css/font-awesome.min.css" rel="stylesheet">
+    <title>soundIt</title>
 
-        <!-- Custom styles -->
-        <link href="./css/main.css" rel="stylesheet">
-    </head>
+    <!-- Bootstrap core CSS -->
+    <link href="./lib/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap theme -->
+    <link href="./lib/css/bootstrap-theme.min.css" rel="stylesheet">
+    <!-- FontAwesome fonts -->
+    <link href="./lib/css/font-awesome.min.css" rel="stylesheet">
 
-    <body role="document">
-        <div class="container">
-            <h1>soundIt</h1>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            <div id="recorder">
-                                <h2>Record soundIt</h2>
-                                <form>
-                                    <div class="form-group">
-                                        <label for="title">Title</label>
-                                        <input type="text" class="form-control" id="title" placeholder="Enter title">
-                                    </div>
-                                    <div class="form-group">
-                                        <a class="btn btn-danger si_Record" href="#" role="button">
-                                            <i class="fa fa-microphone"></i>
-                                            <span>Record</span>
-                                        </a>
-                                        <a class="btn btn-danger si_RecordStop hidden" href="#" role="button">
-                                            <i class="fa fa-microphone"></i>
-                                            <span>Stop</span>
-                                            <span class="countdown"></span> s.
-                                        </a>
-                                        <a class="btn btn-default si_play hidden" href="#" role="button">
-                                            <i class="fa fa-play"></i>
-                                        </a>
-                                        <a class="btn btn-default si_stop hidden" href="#" role="button">
-                                            <i class="fa fa-stop"></i>
-                                        </a>
-                                        <a class="btn btn-default si_deleteRecord hidden" href="#" role="button">
-                                            <i class="fa fa-trash"></i>
-                                        </a>
-                                        <button type="submit" class="pull-right btn btn-primary">Submit</button>
-                                    </div>
-                                </form>
-                            </div>
+    <!-- Custom styles -->
+    <link href="./css/main.css" rel="stylesheet">
+</head>
+
+<body role="document">
+    <div class="container">
+        <h1>soundIt</h1>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div id="recorder">
+                            <h2>Record soundIt</h2>
+                            <form>
+                                <div class="form-group">
+                                    <label for="title">Title</label>
+                                    <input type="text" class="form-control" id="title" placeholder="Enter title">
+                                </div>
+                                <div class="form-group">
+                                    <a class="btn btn-danger si_Record" href="#" role="button">
+                                        <i class="fa fa-microphone"></i>
+                                        <span>Record</span>
+                                    </a>
+                                    <a class="btn btn-danger si_RecordStop hidden" href="#" role="button">
+                                        <i class="fa fa-microphone"></i>
+                                        <span>Stop</span>
+                                        <span class="countdown"></span> s.
+                                    </a>
+                                    <a class="btn btn-default si_play hidden" href="#" role="button">
+                                        <i class="fa fa-play"></i>
+                                    </a>
+                                    <a class="btn btn-default si_stop hidden" href="#" role="button">
+                                        <i class="fa fa-stop"></i>
+                                    </a>
+                                    <a class="btn btn-default si_deleteRecord hidden" href="#" role="button">
+                                        <i class="fa fa-trash"></i>
+                                    </a>
+                                    <button type="submit" class="pull-right btn btn-primary">Submit</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
-                    <h2>soundIt stream</h2>
-                    <ul id="si_Stream">
-                        <li>
-                            <div class="row">
-                                <div class="si_StreamTitle col-md-8">
-                                    <a href="#">Title of sound recorded</a>
-                                </div>
-                                <audio src="audio.mp3"></audio>
-                                <div class="si_StreamActions col-md-4">
-                                    <a href="#" class="btn btn-default btn-sm">
-                                        <i class="fa fa-play"></i>
-                                    </a>
-                                    <a href="#" class="btn btn-default btn-sm">
-                                        <i class="fa fa-stop"></i>
-                                    </a>
-                                    <a href="#" class="btn btn-default btn-sm">
-                                        <i class="fa fa-volume-up"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="row">
-                                <div class="si_StreamTitle col-md-8">
-                                    <a href="#">Title of sound recorded</a>
-                                </div>
-                                <audio src="audio.mp3"></audio>
-                                <div class="si_StreamActions col-md-4">
-                                    <a href="#" class="btn btn-default btn-sm">
-                                        <i class="fa fa-play"></i>
-                                    </a>
-                                    <a href="#" class="btn btn-default btn-sm">
-                                        <i class="fa fa-stop"></i>
-                                    </a>
-                                    <a href="#" class="btn btn-default btn-sm">
-                                        <i class="fa fa-volume-up"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="row">
-                                <div class="si_StreamTitle col-md-8">
-                                    <a href="#">Title of sound recorded</a>
-                                </div>
-                                <audio src="audio.mp3"></audio>
-                                <div class="si_StreamActions col-md-4">
-                                    <a href="#" class="btn btn-default btn-sm">
-                                        <i class="fa fa-play"></i>
-                                    </a>
-                                    <a href="#" class="btn btn-default btn-sm">
-                                        <i class="fa fa-stop"></i>
-                                    </a>
-                                    <a href="#" class="btn btn-default btn-sm">
-                                        <i class="fa fa-volume-up"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            ...
-                        </li>
-                    </ul>
                 </div>
+                <h2>soundIt stream</h2>
+                <ul id="si_Stream">
+                    <li>
+                        <div class="row">
+                            <div class="si_StreamTitle col-md-8">
+                                <a href="#">Title of sound recorded</a>
+                            </div>
+                            <audio src="audio.mp3"></audio>
+                            <div class="si_StreamActions col-md-4">
+                                <a href="#" class="btn btn-default btn-sm">
+                                    <i class="fa fa-play"></i>
+                                </a>
+                                <a href="#" class="btn btn-default btn-sm">
+                                    <i class="fa fa-stop"></i>
+                                </a>
+                                <a href="#" class="btn btn-default btn-sm">
+                                    <i class="fa fa-volume-up"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="row">
+                            <div class="si_StreamTitle col-md-8">
+                                <a href="#">Title of sound recorded</a>
+                            </div>
+                            <audio src="audio.mp3"></audio>
+                            <div class="si_StreamActions col-md-4">
+                                <a href="#" class="btn btn-default btn-sm">
+                                    <i class="fa fa-play"></i>
+                                </a>
+                                <a href="#" class="btn btn-default btn-sm">
+                                    <i class="fa fa-stop"></i>
+                                </a>
+                                <a href="#" class="btn btn-default btn-sm">
+                                    <i class="fa fa-volume-up"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="row">
+                            <div class="si_StreamTitle col-md-8">
+                                <a href="#">Title of sound recorded</a>
+                            </div>
+                            <audio src="audio.mp3"></audio>
+                            <div class="si_StreamActions col-md-4">
+                                <a href="#" class="btn btn-default btn-sm">
+                                    <i class="fa fa-play"></i>
+                                </a>
+                                <a href="#" class="btn btn-default btn-sm">
+                                    <i class="fa fa-stop"></i>
+                                </a>
+                                <a href="#" class="btn btn-default btn-sm">
+                                    <i class="fa fa-volume-up"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        ...
+                    </li>
+                </ul>
             </div>
         </div>
+    </div>
 
-        <!-- Placed at the end of the document so the pages load faster -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-        <script src="./lib/js/bootstrap.min.js"></script>
-        <script src="./lib/js/recorder.js"></script>
-        <script src="./lib/js/libmp3lame.min.js"></script>
-        <script src="./js/main.js"></script>
-        <script src="./js/recorder.js"></script>
-    </body>
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="./lib/js/jquery-1.11.1.min.js"></script>
+    <script src="./lib/js/underscore.min.js"></script>
+    <script src="./lib/js/backbone.min.js"></script>
+    <script src="./lib/js/bootstrap.min.js"></script>
+    <script src="./lib/js/recorder.js"></script>
+    <script src="./lib/js/libmp3lame.min.js"></script>
+    <script src="./js/main.js"></script>
+    <script src="./js/recorder.js"></script>
+</body>
+
 </html>
