@@ -1,0 +1,10 @@
+{
+    "name": "soundIt",
+    "description": "Stream of sounds by differents users",
+    "version": "0.0.0",
+    "private": true,
+    "dependencies": {
+        "express": "^4.12.4",
+        "mongodb": "^2.0.33"
+    }
+}
