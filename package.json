@@ -10,7 +10,7 @@
     "fontawesome": "^4.5.0",
     "i18n": "^0.8.3",
     "jquery": "^3.0.0",
-    "libmp3lame": "git+http://github.com/akrennmair/libmp3lame-js.git",
+    "libmp3lame": "git+https://github.com/WeAreJavascripters/libmp3lame-js.git",
     "mongodb": "^2.0.33",
     "underscore": "^1.8.3"
   },
