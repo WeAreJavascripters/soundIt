@@ -1,52 +1,46 @@
-importScripts("../../lib/js/libmp3lame.min.js")
+importScripts('../../libmp3lame/libmp3lame.js');
 
 var lm;
 var ports;
-var encodedData;
 var handlingFunctions = {
     'init': initialize,
     'log': log,
     'encode': encode
 };
 
-self.onmessage = function(e){
+self.onmessage = function (e) {
     var command = e.data.command;
     handlingFunctions[command](e);
 };
 
-function initialize(event){
-    ports = event.ports;
-    setPortListener();
-};
-
-function initialize(event){
+function initialize(event) {
     ports = event.ports;
     setPortListener();
     initLameCodec();
-};
+}
 
-function setPortListener(){
+function setPortListener() {
     ports[0].start();
-    ports[0].onmessage = function(e){
+    ports[0].onmessage = function (e) {
         var command = e.data.command || 'log';
         handlingFunctions[command](e);
-    }
-};
+    };
+}
 
-function initLameCodec(){
+function initLameCodec() {
     lm = Lame.init();
     Lame.set_mode(lm, Lame.JOINT_STEREO);
     Lame.set_num_channels(lm, 2);
     Lame.set_out_samplerate(lm, 48000);
     Lame.set_bitrate(lm, 128);
     Lame.init_params(lm);
-};
+}
 
-function log(event){
-    console.log('codec: ', e);
-};
+function log(event) {
+    console.log('codec: ', event);
+}
 
-function encode(event){
+function encode(event) {
     var data = event.data.data;
     var left = data.left;
     var right = data.right;
@@ -56,4 +50,4 @@ function encode(event){
         command: 'storeEncoded',
         data: encoded
     });
-};
+}
