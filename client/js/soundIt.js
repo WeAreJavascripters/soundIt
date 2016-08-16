@@ -1,1 +1,3 @@
-let aa = 5;
+import '../../node_modules/webrtc-adapter/out/adapter.js';
+import './app.js';
+

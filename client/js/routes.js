@@ -1,4 +1,6 @@
-var SIRouter = Backbone.Router.extend({
+import Backbone from 'backbone';
+
+const SIRouter = Backbone.Router.extend({
     routes:{
         '': 'home',
         'view/:id': 'showDetail'
@@ -12,3 +14,5 @@ var SIRouter = Backbone.Router.extend({
         console.log(arguments);
     }
 });
+
+export default SIRouter;

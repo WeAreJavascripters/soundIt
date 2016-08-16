@@ -3,7 +3,6 @@ var rightBufferData;
 var encodedData;
 var totalLength = 0;
 var ports;
-var recorderPorts;
 var count = 0;
 
 var handlingFunctions = {
@@ -21,9 +20,10 @@ self.onmessage = function(e){
 };
 
 function initialize(event){
+    resetData();
     ports = event.ports;
     setPortListener();
-};
+}
 
 function setPortListener(){
     ports[0].start();
@@ -35,8 +35,8 @@ function setPortListener(){
     ports[1].onmessage = function(e){
         var command = e.data.command || 'log';
         handlingFunctions[command](e);
-    }
-};
+    };
+}
 
 function storeData(e){
     var data = e.data;
@@ -51,14 +51,14 @@ function storeData(e){
             right: data.right
         }
     });
-};
+}
 
 function resetData(){
     leftBufferData = [];
     rightBufferData = [];
     encodedData = [];
     totalLength = 0;
-};
+}
 
 function storeEncodedData(event){
     var encodedPiece = event.data.data;
@@ -66,14 +66,14 @@ function storeEncodedData(event){
     for(var i = 0; i < encodedPiece.size; i++){
         encodedData.push(encodedPiece.data[i]);
     }
-    console.log("stored: ", encodedPiece.size);
+    console.log('stored: ', encodedPiece.size);
     if(count <= 0){
-        console.log("finished!");
+        console.log('finished!');
         ports[1].postMessage({
             command: 'finish'
         });  
     }
-};
+}
 
 function createAudio(){
     var blob;
@@ -83,16 +83,16 @@ function createAudio(){
     
     function createBlob(){
         blob = new Blob([new Uint8Array(encodedData)], {type:"audio/mp3"});
-    };
+    }
     
     function sendBlob(){
         ports[1].postMessage({
             command: 'displayAudio',
             blob: blob
         });  
-    };
-};
+    }
+}
 
 function log(e){
-    console.log("storage: ", e);
+    console.log('storage: ', e);
 }

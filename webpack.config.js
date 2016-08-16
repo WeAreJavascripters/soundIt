@@ -25,12 +25,20 @@ module.exports = (function () {
                     from: './index.html'
                 }, {
                     context: path.resolve(__dirname + '/client'),
+                    from: './workers/',
+                    to: 'js/workers/'
+                }, {
+                    context: path.resolve(__dirname + '/client'),
                     from: './css/',
                     to: 'css/'
+                }, {
+                    context: path.resolve(__dirname),
+                    from: './node_modules/libmp3lame/libmp3lame.js',
+                    to: 'libmp3lame/'
                 }
             ])
         ],
-        module:{
+        module: {
             loaders: [
                 {
                     test: /\.js$/,
